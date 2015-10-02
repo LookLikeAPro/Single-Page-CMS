@@ -1,4 +1,9 @@
 {
+	"license": "UNLICENSED",
+	"repository": {
+		"type" : "git",
+		"url" : "https://github.com/LookLikeAPro/Single-Page-CMS"
+	},
 	"scripts": {
 		"generate": "node scripts/generator.js"
 	}

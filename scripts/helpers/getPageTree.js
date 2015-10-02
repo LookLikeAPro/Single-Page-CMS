@@ -1,5 +1,5 @@
-var fs = require('fs');
-var isUnixHiddenPath = require("./isUnixHiddenPath");
+var fs = require('fs-extra')
+var isUnixHiddenPath = require("./fileHelpers").isUnixHiddenPath;
 
 function getRelativeDir(dir, file) {
 	return file.substr(dir.length+1);
@@ -21,13 +21,13 @@ var walk = function (dir, done) {
 			}
 			else {
 				fs.stat(filePath, function (error, stat) {
-				if (stat && stat.isDirectory()) {
-					walk(filePath, function (childFiles) {
-						files[fileName] = childFiles;
-						next();
-					});
-				}
-				else {
+					if (stat && stat.isDirectory()) {
+						walk(filePath, function (childFiles) {
+							files[fileName] = childFiles;
+							next();
+						});
+					}
+					else {
 						files[fileName.substr(0, fileName.lastIndexOf("."))] = filePath;
 						next();
 					}
@@ -40,7 +40,7 @@ var walk = function (dir, done) {
 function promiseMaker (dir) {
 	return new Promise(function(fulfill, reject) {
 		walk(dir, function(files) {
-			fulfill(files);
+			fulfill(files || {});
 		})
 	});
 };
